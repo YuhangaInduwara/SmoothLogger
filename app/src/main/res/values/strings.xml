@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SmoothLogger</string>
+    <string name="accessibility_service_name">SmoothLogger</string>
+    <string name="no_texts_captured_currently">No texts captured currently!</string>
+    <string name="smoothlogger">SmoothLogger</string>
+    <string name="todo">TODO</string>
+    <string name="welcome_to_smoothlogger">Welcome to SmoothLogger</string>
+    <string name="todo1">TODO</string>
+    <string name="todo2">TODO</string>
+</resources>
