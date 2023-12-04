@@ -4,19 +4,21 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -36,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements TextChangeListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setTransparentNotificationBar();
 
         if (!isAccessibilityServiceEnabled()) {
             showEnableAccessibilityDialog();
@@ -52,14 +55,11 @@ public class HomeActivity extends AppCompatActivity implements TextChangeListene
             Log.e("HomeActivity", "onCreate: Accessibility service instance is null");
         }
 
-        Spinner dropdown = findViewById(R.id.spinner1);
-        String[] items = new String[]{"1", "2", "three"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
-
         String fileContent = readTextFromFile(file);
-        TextView loggedTextView = findViewById(R.id.test_text);
-        loggedTextView.setText(fileContent);
+        if(fileContent != ""){
+            TextView loggedTextView = findViewById(R.id.test_text);
+            loggedTextView.setText(fileContent);
+        }
     }
 
     private boolean isAccessibilityServiceEnabled() {
@@ -142,6 +142,19 @@ public class HomeActivity extends AppCompatActivity implements TextChangeListene
             e.printStackTrace();
         }
         return text.toString();
+    }
+
+    protected void setTransparentNotificationBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+            window.getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // Add this flag
+        }
     }
 
 }
